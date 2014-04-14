@@ -1,6 +1,7 @@
 SpreePrzelewy24
 ====================
 
+This is fork of matfiz/spree_przelewy24
 Przelewy24 payment system for Spree (>= 1.0)
 
 Install
@@ -8,9 +9,9 @@ Install
 
 Add to your Gemfile:
 
-    gem 'spree_przelewy24', :git => 'git://github.com/matfiz/spree_przelewy24.git'
+    gem 'spree_przelewy24', :git => 'git://github.com/btolarz/spree_przelewy24.git'
 
-and run 
+and run
 
     bundle install
 
@@ -21,12 +22,12 @@ You'll have to set the following parameters:
   * seller ID
   * CRC key
   * optionally: language and przelewy24 URLs
-    
+
 In Spree Admin zone you have to create new payment method and select *Spree::PaymentMethod::Przelewy24* as a provider.
 I recommend to test it first - just select *test mode* in payment method settings and it will use sandbox platform instead of the production one.
 
 This work is loosely based on https://github.com/pronix/spree-ebsin and https://github.com/espresse/spree_dotpay_pl_payment.git.
- 
+
 ------------------------------------------------------------------------------
 License
 ------------------------------------------------------------------------------
