@@ -52,10 +52,12 @@ module Spree
       @order = Order.find(params[:order_id])
 
       session[:order_id]=nil
-      if @order.state=="complete"
-        redirect_to order_url(@order, {:checkout_complete => true, :order_token => @order.token}), :notice => I18n.t("payment_success")
-      else
+      if @order.completed?
+        flash.notice = Spree.t(:order_processed_successfully)
+        flash['order_completed'] = true
         redirect_to order_url(@order)
+      else
+        redirect_to checkout_state_path(@order.state)
       end
     end
 
@@ -65,13 +67,9 @@ module Spree
 
     # validating dotpay message
     def przelewy24_transaction_crc(gateway,order,session_id)
-      calc_md5 = Digest::MD5.hexdigest(session_id + "|" +
-        (@gateway.preferred_p24_id_sprzedawcy.nil? ? "" : @gateway.preferred_p24_id_sprzedawcy) + "|" +
-        (@gateway.p24_amount(@order.total).nil? ? "" : @gateway.p24_amount(@order.total)) + "|" +
-        (@gateway.preferred_crc_key.nil? ? "" : @gateway.preferred_crc_key))
-
-        return calc_md5
-
+      Digest::MD5.hexdigest(
+        [session_id, @gateway.preferred_p24_id_sprzedawcy, @gateway.p24_amount(@order.total), @gateway.preferred_crc_key].join('|')
+      )
     end
 
     def przelewy24_verify(gateway,order,params)
