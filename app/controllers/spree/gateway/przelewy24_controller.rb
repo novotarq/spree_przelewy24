@@ -1,9 +1,8 @@
 require 'digest/md5'
 module Spree
-  class Gateway::Przelewy24Controller < Spree::BaseController
-    skip_before_filter :verify_authenticity_token, :only => [:comeback, :complete]
-    include Spree::Core::ControllerHelpers::Order
-    helper 'spree/store'
+  class Gateway::Przelewy24Controller < StoreController
+    protect_from_forgery except: [:comeback, :complete]
+    helper 'spree/orders'
 
     # Show form Przelewy24 for pay
     def show
